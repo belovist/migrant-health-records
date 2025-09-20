@@ -24,7 +24,7 @@ Built with **React (frontend)** and **Node.js/Express (backend)**.
 - 🚀 Express.js  
 
 ### Database
-- 🗄️ MongoDB (or PostgreSQL / MySQL)  
+- 🗄️MySQL  
 
 ---
 

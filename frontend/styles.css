@@ -144,98 +144,67 @@ body {
   margin-top: auto;
 }
 
-/* Role Selection Section */
-#role-selection {
-  background-color: #f1f5f9;
-  padding: 2rem;
+/* NEW styles for the interactive cards */
+.role-card {
+  background-color: #fff;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  margin: 2rem auto;
-  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
-#role-selection h2 {
-  font-size: 1.5rem;
+
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.role-card.selected {
+  border-color: #0c4a6e;
+  box-shadow: 0 8px 25px rgba(12, 74, 110, 0.2);
+  transform: translateY(-5px);
+}
+
+.role-card-body {
+  padding: 2rem;
+  transition: opacity 0.3s ease;
+}
+
+.role-card.selected .role-card-body {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.role-card-title {
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 1rem;
   color: #0c4a6e;
 }
-#role-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-#role-form label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+
+.role-card-text {
   font-size: 1rem;
-  font-weight: 500;
-  color: #1f2937;
-  cursor: pointer;
+  color: #4b5563;
 }
-#role-form input[type="radio"] {
-  accent-color: #0c4a6e;
-  width: 1.2rem;
-  height: 1.2rem;
+
+.role-form {
+  background-color: #f9fafb;
 }
-#id-input-container {
-  display: none;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-#id-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1f2937;
-}
-#user-id {
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  color: #374151;
-  outline: none;
-  transition: border-color 0.2s;
-}
-#user-id:focus {
+
+.btn-primary {
+  background-color: #0c4a6e;
   border-color: #0c4a6e;
 }
-#role-form button {
-  padding: 0.75rem;
-  background-color: #0c4a6e;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-#role-form button:hover {
+
+.btn-primary:hover {
   background-color: #083a5c;
+  border-color: #083a5c;
 }
 
-/* Admin Dashboard Styles */
-.hero {
-  background-color: #0c4a6e;
-  color: #fff;
-  padding: 2rem;
-  text-align: center;
-  border-radius: 0.5rem;
-  margin: 2rem auto;
-  max-width: 800px;
-}
-.hero h2 {
-  font-size: 2rem;
-  font-weight: 700;
-}
-.hero p {
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
-}
 
+/* Admin Dashboard Styles (No changes needed here) */
 .data-section, .map-section {
   margin: 2rem auto;
   max-width: 800px;

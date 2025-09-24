@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DHRMS Kerala - Dashboard</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Fixed Header -->
   <header class="header">
     <div class="logo-container">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
@@ -21,7 +23,6 @@
       <h1 class="app-title">DHRMS Kerala</h1>
     </div>
 
-    <!-- Nav Links -->
     <nav class="navbar">
       <a href="index.html" class="active">Dashboard</a>
       <a href="records.html">My Records</a>
@@ -31,99 +32,109 @@
     </nav>
   </header>
 
-  <!-- Main Content -->
   <main class="page-content">
-    <!-- Role Selection -->
-    <section id="role-selection">
-      <h2>Select Your Role</h2>
-      <form id="role-form">
-        <label>
-          <input type="radio" name="role" value="admin"> Admin
-        </label>
-        <label>
-          <input type="radio" name="role" value="patient"> Patient
-        </label>
-        <div id="id-input-container" style="display: none; margin-top: 10px;">
-          <label for="user-id" id="id-label">Enter ID:</label>
-          <input type="text" id="user-id" name="user-id" required>
+    
+    <section id="role-selection-interactive" class="container text-center my-5">
+      <h2 class="display-6 fw-bold mb-4">Welcome to DHRMS Kerala</h2>
+      <p class="lead mb-5">Please select your role to continue.</p>
+      <div class="row justify-content-center g-4">
+        <div class="col-md-5">
+          <div class="role-card" id="patient-card">
+            <div class="role-card-body">
+              <h3 class="role-card-title">Patient</h3>
+              <p class="role-card-text">Access your health records, view appointments, and find clinics.</p>
+            </div>
+            <form id="patient-form" class="role-form d-none p-4">
+              <div class="mb-3 text-start">
+                <label for="patient-id" class="form-label">Aadhaar Number</label>
+                <input type="text" class="form-control" id="patient-id" name="user-id" placeholder="1234-5678-9012" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login as Patient</button>
+            </form>
+          </div>
         </div>
-        <button type="submit">Submit</button>
-      </form>
+        <div class="col-md-5">
+          <div class="role-card" id="admin-card">
+            <div class="role-card-body">
+              <h3 class="role-card-title">Admin</h3>
+              <p class="role-card-text">Manage patient data, monitor trends, and generate reports.</p>
+            </div>
+            <form id="admin-form" class="role-form d-none p-4">
+              <div class="mb-3 text-start">
+                <label for="admin-id" class="form-label">Employee ID</label>
+                <input type="text" class="form-control" id="admin-id" name="user-id" placeholder="EMP12345" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login as Admin</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Dashboard Content -->
     <section id="dashboard-content" style="display: none;">
-      <!-- Content will be dynamically injected here -->
-    </section>
+      </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
   <script>
-    // Role-based dashboard rendering with ID logging
-    const roleForm = document.getElementById('role-form');
-    const roleSelection = document.getElementById('role-selection');
-    const dashboardContent = document.getElementById('dashboard-content');
-    const idInputContainer = document.getElementById('id-input-container');
-    const userIdInput = document.getElementById('user-id');
-    const idLabel = document.getElementById('id-label');
+    document.addEventListener('DOMContentLoaded', () => {
+      const roleSelectionScreen = document.getElementById('role-selection-interactive');
+      const dashboardContent = document.getElementById('dashboard-content');
+      
+      const patientCard = document.getElementById('patient-card');
+      const adminCard = document.getElementById('admin-card');
 
-    // Show ID input field based on role selection
-    roleForm.addEventListener('change', (event) => {
-      const selectedRole = document.querySelector('input[name="role"]:checked');
-      if (selectedRole) {
-        idInputContainer.style.display = 'block';
-        if (selectedRole.value === 'admin') {
-          idLabel.textContent = 'Enter Employee ID:';
-          userIdInput.placeholder = 'E.g., EMP12345';
-        } else if (selectedRole.value === 'patient') {
-          idLabel.textContent = 'Enter Aadhaar Number:';
-          userIdInput.placeholder = 'E.g., 1234-5678-9012';
+      const patientForm = document.getElementById('patient-form');
+      const adminForm = document.getElementById('admin-form');
+
+      const cards = [patientCard, adminCard];
+
+      // Function to handle card selection
+      const selectRole = (selectedCard) => {
+        cards.forEach(card => {
+          const form = card.querySelector('.role-form');
+          if (card === selectedCard) {
+            card.classList.add('selected');
+            form.classList.remove('d-none');
+          } else {
+            card.classList.remove('selected');
+            form.classList.add('d-none');
+          }
+        });
+      };
+
+      patientCard.addEventListener('click', () => selectRole(patientCard));
+      adminCard.addEventListener('click', () => selectRole(adminCard));
+
+      // Handle Patient Form Submission
+      patientForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        event.stopPropagation(); // Prevent card click event from firing again
+
+        const userId = document.getElementById('patient-id').value.trim();
+        if (!/^\d{4}-\d{4}-\d{4}$/.test(userId)) {
+          alert('Invalid Aadhaar Number. Please use the format 1234-5678-9012.');
+          return;
         }
-      }
-    });
+        
+        console.log(`Role: patient, ID: ${userId}`);
+        
+        roleSelectionScreen.style.display = 'none';
+        dashboardContent.style.display = 'block';
 
-    // Handle form submission
-    roleForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const selectedRole = document.querySelector('input[name="role"]:checked');
-      const userId = userIdInput.value.trim();
-
-      if (!selectedRole || !userId) {
-        alert('Please select a role and enter a valid ID.');
-        return;
-      }
-
-      const userRole = selectedRole.value;
-
-      // Validate ID format
-      if (userRole === 'admin' && !/^EMP\d{5}$/.test(userId)) {
-        alert('Invalid Employee ID. Please use the format EMP12345.');
-        return;
-      } else if (userRole === 'patient' && !/^\d{4}-\d{4}-\d{4}$/.test(userId)) {
-        alert('Invalid Aadhaar Number. Please use the format 1234-5678-9012.');
-        return;
-      }
-
-      console.log(`Role: ${userRole}, ID: ${userId}`); // Log the role and ID
-
-      // Hide role selection and show dashboard content
-      roleSelection.style.display = 'none';
-      dashboardContent.style.display = 'block';
-
-      if (userRole === 'admin') {
-        window.location.href = 'admin.html'; // Redirect to admin dashboard
-      } else if (userRole === 'patient') {
+        // Dynamically create and show the patient dashboard
         dashboardContent.innerHTML = `
-          <section class="patient-dashboard">
-            <h2>My Health Summary</h2>
+          <section class="hero">
+            <h2 class="hero-title">My Health Summary</h2>
             <p class="malayalam-text">എൻ്റെ ആരോഗ്യ സംഗ്രഹം</p>
             <p class="health-id">Unique Health ID: <span>${userId}</span></p>
-            <div class="info-grid">
+          </section>
+          <section class="info-grid">
               <div class="info-card info-card--appointment">
                 <p class="info-card-label">Next Appointment</p>
                 <p class="info-card-text">15 Dec, 10:30 AM</p>
@@ -132,10 +143,26 @@
                 <p class="info-card-label">Alerts</p>
                 <p class="info-card-text">Measles Booster</p>
               </div>
-            </div>
           </section>
         `;
-      }
+      });
+
+      // Handle Admin Form Submission
+      adminForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        event.stopPropagation(); // Prevent card click event from firing again
+
+        const userId = document.getElementById('admin-id').value.trim();
+        if (!/^EMP\d{5}$/.test(userId)) {
+          alert('Invalid Employee ID. Please use the format EMP12345.');
+          return;
+        }
+
+        console.log(`Role: admin, ID: ${userId}`);
+        
+        // Redirect to the admin dashboard
+        window.location.href = 'admin.html';
+      });
     });
   </script>
 </body>

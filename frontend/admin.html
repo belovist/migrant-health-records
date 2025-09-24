@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - DHRMS Kerala</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+
+  <!-- Fixed Header -->
+  <header class="header">
+    <div class="logo-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      </svg>
+      <h1 class="app-title">Admin Dashboard</h1>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="navbar">
+      <a href="admin.html" class="active">Dashboard</a>
+      <a href="patients.html">Patient Data</a>
+      <a href="reports.html">Reports</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-content">
+    <!-- Welcome Section -->
+    <section class="hero">
+      <h2>Welcome, Admin!</h2>
+      <p>Monitor and manage patient data, view disease trends, and access reports.</p>
+    </section>
+
+    <!-- Patient Data Section -->
+    <section class="data-section">
+      <h2>Access Patient Data</h2>
+      <form id="patient-search-form">
+        <input type="text" id="patient-search" placeholder="Enter Patient Name or ID" required>
+        <button type="submit">Search</button>
+      </form>
+      <div id="patient-results" class="results-container">
+        <!-- Patient search results will be dynamically displayed here -->
+      </div>
+    </section>
+
+    <!-- Disease Map Section -->
+    <section class="map-section">
+      <h2>Disease Trends in Kerala</h2>
+      <div class="map-container">
+        <canvas id="kerala-disease-map"></canvas>
+      </div>
+      <div id="kerala-map" style="height: 400px; width: 100%; margin-top: 1rem;"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Patient Search Form
+    const patientSearchForm = document.getElementById('patient-search-form');
+    const patientResults = document.getElementById('patient-results');
+
+    patientSearchForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = document.getElementById('patient-search').value.trim();
+
+      // Simulate fetching patient data
+      patientResults.innerHTML = `
+        <h3>Search Results for "${query}":</h3>
+        <ul>
+          <li>Patient ID: P12345, Name: John Doe, Age: 45, Condition: Diabetes</li>
+          <li>Patient ID: P67890, Name: Jane Smith, Age: 32, Condition: Hypertension</li>
+        </ul>
+      `;
+    });
+
+    // Disease Map Chart
+    const ctx = document.getElementById('kerala-disease-map').getContext('2d');
+    const diseaseMap = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Thiruvananthapuram', 'Kollam', 'Pathanamthitta', 'Alappuzha', 'Kottayam', 'Idukki', 'Ernakulam', 'Thrissur', 'Palakkad', 'Malappuram', 'Kozhikode', 'Wayanad', 'Kannur', 'Kasaragod'],
+        datasets: [{
+          label: 'Disease Cases',
+          data: [120, 95, 80, 110, 130, 70, 150, 140, 90, 100, 85, 60, 75, 50],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Districts'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Number of Cases'
+            },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Initialize Leaflet map
+    var map = L.map('kerala-map').setView([10.8505, 76.2711], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Example hotspots
+    var hotspots = [
+      { name: "Thiruvananthapuram", lat: 8.5241, lng: 76.9366, cases: 120 },
+      { name: "Ernakulam", lat: 9.9816, lng: 76.2999, cases: 150 },
+      { name: "Kozhikode", lat: 11.2588, lng: 75.7804, cases: 85 }
+    ];
+    hotspots.forEach(h => {
+      L.circle([h.lat, h.lng], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.4,
+        radius: h.cases * 200 // scale radius by cases
+      }).addTo(map).bindPopup(`<b>${h.name}</b><br/>Cases: ${h.cases}`);
+    });
+  </script>
+</body>
+</html>

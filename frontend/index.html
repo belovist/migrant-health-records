@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DHRMS Kerala - Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Fixed Header -->
+  <header class="header">
+    <div class="logo-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 
+        10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 
+        15.5V11h2v6.5h-2zM12 9c-.55 0-1-.45-1-1s.45-1 
+        1-1 1 1.45 1 1 1-.45 1-1 1z"/>
+      </svg>
+      <h1 class="app-title">DHRMS Kerala</h1>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="navbar">
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="records.html">My Records</a>
+      <a href="appointments.html">Appointments</a>
+      <a href="resources.html">Health Resources</a>
+      <a href="clinics.html">Clinics</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-content">
+    <!-- Role Selection -->
+    <section id="role-selection">
+      <h2>Select Your Role</h2>
+      <form id="role-form">
+        <label>
+          <input type="radio" name="role" value="admin"> Admin
+        </label>
+        <label>
+          <input type="radio" name="role" value="patient"> Patient
+        </label>
+        <div id="id-input-container" style="display: none; margin-top: 10px;">
+          <label for="user-id" id="id-label">Enter ID:</label>
+          <input type="text" id="user-id" name="user-id" required>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section id="dashboard-content" style="display: none;">
+      <!-- Content will be dynamically injected here -->
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    // Role-based dashboard rendering with ID logging
+    const roleForm = document.getElementById('role-form');
+    const roleSelection = document.getElementById('role-selection');
+    const dashboardContent = document.getElementById('dashboard-content');
+    const idInputContainer = document.getElementById('id-input-container');
+    const userIdInput = document.getElementById('user-id');
+    const idLabel = document.getElementById('id-label');
+
+    // Show ID input field based on role selection
+    roleForm.addEventListener('change', (event) => {
+      const selectedRole = document.querySelector('input[name="role"]:checked');
+      if (selectedRole) {
+        idInputContainer.style.display = 'block';
+        if (selectedRole.value === 'admin') {
+          idLabel.textContent = 'Enter Employee ID:';
+          userIdInput.placeholder = 'E.g., EMP12345';
+        } else if (selectedRole.value === 'patient') {
+          idLabel.textContent = 'Enter Aadhaar Number:';
+          userIdInput.placeholder = 'E.g., 1234-5678-9012';
+        }
+      }
+    });
+
+    // Handle form submission
+    roleForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const selectedRole = document.querySelector('input[name="role"]:checked');
+      const userId = userIdInput.value.trim();
+
+      if (!selectedRole || !userId) {
+        alert('Please select a role and enter a valid ID.');
+        return;
+      }
+
+      const userRole = selectedRole.value;
+
+      // Validate ID format
+      if (userRole === 'admin' && !/^EMP\d{5}$/.test(userId)) {
+        alert('Invalid Employee ID. Please use the format EMP12345.');
+        return;
+      } else if (userRole === 'patient' && !/^\d{4}-\d{4}-\d{4}$/.test(userId)) {
+        alert('Invalid Aadhaar Number. Please use the format 1234-5678-9012.');
+        return;
+      }
+
+      console.log(`Role: ${userRole}, ID: ${userId}`); // Log the role and ID
+
+      // Hide role selection and show dashboard content
+      roleSelection.style.display = 'none';
+      dashboardContent.style.display = 'block';
+
+      if (userRole === 'admin') {
+        window.location.href = 'admin.html'; // Redirect to admin dashboard
+      } else if (userRole === 'patient') {
+        dashboardContent.innerHTML = `
+          <section class="patient-dashboard">
+            <h2>My Health Summary</h2>
+            <p class="malayalam-text">എൻ്റെ ആരോഗ്യ സംഗ്രഹം</p>
+            <p class="health-id">Unique Health ID: <span>${userId}</span></p>
+            <div class="info-grid">
+              <div class="info-card info-card--appointment">
+                <p class="info-card-label">Next Appointment</p>
+                <p class="info-card-text">15 Dec, 10:30 AM</p>
+              </div>
+              <div class="info-card info-card--alerts">
+                <p class="info-card-label">Alerts</p>
+                <p class="info-card-text">Measles Booster</p>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>

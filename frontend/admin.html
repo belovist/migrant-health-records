@@ -12,82 +12,66 @@
 </head>
 <body>
 
-  <!-- Fixed Header -->
   <header class="header">
     <div class="logo-container">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" class="me-2">
+        <path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12A10,10,0,0,0,12,2M7.07,18.28L7.07,18.28L8,17.35L11,20.35L11,15.5A1,1,0,0,1,12,14.5A1,1,0,0,1,13,15.5L13,20.35L16,17.35L16.93,18.28L12,23.21L7.07,18.28M12,0.79L16.93,5.72L16,6.65L13,3.65L13,8.5A1,1,0,0,1,12,9.5A1,1,0,0,1,11,8.5L11,3.65L8,6.65L7.07,5.72L12,0.79Z" />
       </svg>
       <h1 class="app-title">Admin Dashboard</h1>
     </div>
-
-    <!-- Nav Links -->
     <nav class="navbar">
       <a href="admin.html" class="active">Dashboard</a>
-      <a href="patients.html">Patient Data</a>
-      <a href="reports.html">Reports</a>
     </nav>
   </header>
 
-  <!-- Main Content -->
   <main class="page-content">
-    <!-- Welcome Section -->
-    <section class="hero">
-      <h2>Welcome, Admin!</h2>
+    <section class="page-container">
+      <h2 class="display-6 fw-bold">Welcome, Admin!</h2>
       <p>Monitor and manage patient data, view disease trends, and access reports.</p>
-    </section>
-
-    <!-- Patient Data Section -->
-    <section class="data-section">
-      <h2>Access Patient Data</h2>
-      <form id="patient-search-form">
-        <input type="text" id="patient-search" placeholder="Enter Patient Name or ID" required>
-        <button type="submit">Search</button>
-      </form>
-      <div id="patient-results" class="results-container">
-        <!-- Patient search results will be dynamically displayed here -->
+    
+      <div class="record-section">
+        <h4 class="record-title">Access Patient Data</h4>
+        <form id="patient-search-form" class="d-flex gap-2">
+          <input type="text" id="patient-search" class="form-control" placeholder="Enter Patient Name or ID" required>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div id="patient-results" class="mt-3">
+          <!-- Patient search results will be dynamically displayed here -->
+        </div>
       </div>
-    </section>
 
-    <!-- Disease Map Section -->
-    <section class="map-section">
-      <h2>Disease Trends in Kerala</h2>
-      <div class="map-container">
-        <canvas id="kerala-disease-map"></canvas>
+      <div class="record-section">
+        <h4 class="record-title">Disease Trends in Kerala</h4>
+        <canvas id="kerala-disease-map" class="mb-4"></canvas>
+        <div id="kerala-map" style="height: 400px; width: 100%;"></div>
       </div>
-      <div id="kerala-map" style="height: 400px; width: 100%; margin-top: 1rem;"></div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
   </footer>
 
   <script>
-    // Patient Search Form
-    const patientSearchForm = document.getElementById('patient-search-form');
-    const patientResults = document.getElementById('patient-results');
-
-    patientSearchForm.addEventListener('submit', (event) => {
+    // Mock patient search
+    document.getElementById('patient-search-form').addEventListener('submit', (event) => {
       event.preventDefault();
       const query = document.getElementById('patient-search').value.trim();
-
-      // Simulate fetching patient data
-      patientResults.innerHTML = `
-        <h3>Search Results for "${query}":</h3>
-        <ul>
-          <li>Patient ID: P12345, Name: John Doe, Age: 45, Condition: Diabetes</li>
-          <li>Patient ID: P67890, Name: Jane Smith, Age: 32, Condition: Hypertension</li>
+      document.getElementById('patient-results').innerHTML = `
+        <p>Search Results for "<strong>${query}</strong>":</p>
+        <ul class="list-group">
+          <li class="list-group-item">Patient ID: P12345, Name: John Doe, Age: 45, Condition: Diabetes</li>
+          <li class="list-group-item">Patient ID: P67890, Name: Jane Smith, Age: 32, Condition: Hypertension</li>
         </ul>
       `;
     });
 
     // Disease Map Chart
     const ctx = document.getElementById('kerala-disease-map').getContext('2d');
-    const diseaseMap = new Chart(ctx, {
+    new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Thiruvananthapuram', 'Kollam', 'Pathanamthitta', 'Alappuzha', 'Kottayam', 'Idukki', 'Ernakulam', 'Thrissur', 'Palakkad', 'Malappuram', 'Kozhikode', 'Wayanad', 'Kannur', 'Kasaragod'],
+        labels: ['TVM', 'KLM', 'PTA', 'ALP', 'KTM', 'IDK', 'EKM', 'TSR', 'PKD', 'MPM', 'KKD', 'WYD', 'KNR', 'KSD'],
         datasets: [{
           label: 'Disease Cases',
           data: [120, 95, 80, 110, 130, 70, 150, 140, 90, 100, 85, 60, 75, 50],
@@ -95,30 +79,6 @@
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
         }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          }
-        },
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Districts'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Number of Cases'
-            },
-            beginAtZero: true
-          }
-        }
       }
     });
 
@@ -128,7 +88,6 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Example hotspots
     var hotspots = [
       { name: "Thiruvananthapuram", lat: 8.5241, lng: 76.9366, cases: 120 },
       { name: "Ernakulam", lat: 9.9816, lng: 76.2999, cases: 150 },
@@ -139,7 +98,7 @@
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.4,
-        radius: h.cases * 200 // scale radius by cases
+        radius: h.cases * 200
       }).addTo(map).bindPopup(`<b>${h.name}</b><br/>Cases: ${h.cases}`);
     });
   </script>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DHRMS Kerala - Patient Sign Up</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo-container">
+       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" class="me-2">
+        <path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12A10,10,0,0,0,12,2M7.07,18.28L7.07,18.28L8,17.35L11,20.35L11,15.5A1,1,0,0,1,12,14.5A1,1,0,0,1,13,15.5L13,20.35L16,17.35L16.93,18.28L12,23.21L7.07,18.28M12,0.79L16.93,5.72L16,6.65L13,3.65L13,8.5A1,1,0,0,1,12,9.5A1,1,0,0,1,11,8.5L11,3.65L8,6.65L7.07,5.72L12,0.79Z" />
+      </svg>
+      <h1 class="app-title">DHRMS Kerala</h1>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="signup-container">
+      <div class="signup-form-wrapper">
+        <h2 class="display-6 fw-bold mb-3">Create Patient Account</h2>
+        <p class="text-muted mb-4">Please fill out the form below to register.</p>
+        
+        <form id="signup-form" class="signup-form">
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" required>
+          </div>
+          <div class="mb-3">
+            <label for="aadhaar" class="form-label">Aadhaar Card Number</label>
+            <input type="text" class="form-control" id="aadhaar" placeholder="1234-5678-9012" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Create Password</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+           <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="showPasswordToggle">
+            <label class="form-check-label" for="showPasswordToggle">
+              Show Password
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100 mt-3">Create Account</button>
+          
+          <p class="mt-4 text-center">
+            Already have an account? <a href="index.html">Log In</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
+  </footer>
+
+  <script src="localstorage-manager.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const signupForm = document.getElementById('signup-form');
+      const aadhaarInput = document.getElementById('aadhaar');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirmPassword');
+      const showPasswordToggle = document.getElementById('showPasswordToggle');
+
+      showPasswordToggle.addEventListener('change', () => {
+        const type = showPasswordToggle.checked ? 'text' : 'password';
+        passwordInput.type = type;
+        confirmPasswordInput.type = type;
+      });
+      
+      aadhaarInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.slice(0, 4) + '-' + value.slice(4);
+        if (value.length > 9) value = value.slice(0, 9) + '-' + value.slice(9, 13);
+        e.target.value = value;
+      });
+
+      signupForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value.trim();
+        const aadhaar = aadhaarInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (!/^\d{4}-\d{4}-\d{4}$/.test(aadhaar)) {
+          alert('Please enter a valid Aadhaar number in the format 1234-5678-9012.');
+          return;
+        }
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
+        }
+        if (password !== confirmPassword) {
+          alert('Passwords do not match.');
+          return;
+        }
+
+        const newPatient = {
+          name: fullName,
+          aadhaar: aadhaar,
+          password: password,
+          registrationDate: new Date().toISOString()
+        };
+
+        const success = savePatientData(newPatient);
+
+        if (success) {
+          alert('Sign up successful! You will now be redirected to the login page.');
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

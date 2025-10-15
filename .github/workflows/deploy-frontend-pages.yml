@@ -5,10 +5,16 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -24,15 +30,23 @@ jobs:
         run: |
           if [ -f package.json ]; then npm ci; fi
 
-      - name: Build (if build step exists)
+      - name: Build site (if build script exists)
         working-directory: frontend
         run: |
-          if [ -f package.json ] && grep -q "build" package.json; then npm run build; fi
+          if [ -f package.json ]; then npm run build --if-present; fi
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend
-          publish_branch: gh-pages
-          keep_files: false
+          path: frontend
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

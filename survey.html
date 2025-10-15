@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DHRMS Kerala - Medical Survey</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo-container">
+       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white" class="me-2">
+        <path d="M12,2A10,10,0,0,0,2,12A10,10,0,0,0,12,22A10,10,0,0,0,22,12A10,10,0,0,0,12,2M7.07,18.28L7.07,18.28L8,17.35L11,20.35L11,15.5A1,1,0,0,1,12,14.5A1,1,0,0,1,13,15.5L13,20.35L16,17.35L16.93,18.28L12,23.21L7.07,18.28M12,0.79L16.93,5.72L16,6.65L13,3.65L13,8.5A1,1,0,0,1,12,9.5A1,1,0,0,1,11,8.5L11,3.65L8,6.65L7.07,5.72L12,0.79Z" />
+      </svg>
+      <h1 class="app-title">DHRMS Kerala</h1>
+    </div>
+    <nav class="navbar">
+      <a href="index.html">Dashboard</a>
+      <a href="records.html">My Records</a>
+      <a href="appointments.html">Appointments</a>
+      <a href="resources.html">Health Resources</a>
+      <a href="clinics.html">Clinics</a>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <div class="signup-container">
+      <div class="signup-form-wrapper">
+        <h2 class="display-6 fw-bold mb-3">Medical Survey</h2>
+        <p class="text-muted mb-4">Please provide the following details to help us understand your health better.</p>
+        
+        <form id="survey-form">
+          <div class="mb-3">
+            <label for="stateOrigin" class="form-label">State of Origin</label>
+            <select class="form-select" id="stateOrigin" required></select>
+          </div>
+          <div class="mb-3">
+            <label for="districtOrigin" class="form-label">District of Origin</label>
+            <input type="text" class="form-control" id="districtOrigin" required>
+          </div>
+          <div class="mb-3">
+            <label for="currentLocation" class="form-label">Current Location</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="currentLocation" placeholder="Latitude, Longitude" readonly>
+              <button class="btn btn-outline-secondary" type="button" id="getLocationBtn">Auto-Detect</button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="currentSymptoms" class="form-label">Current Symptoms</label>
+            <textarea class="form-control" id="currentSymptoms" rows="3" placeholder="e.g., Fever, cough, headache..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Submit Survey</button>
+           <p class="mt-3 text-center"><a href="index.html">Back to Dashboard</a></p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
+  </footer>
+
+  <script src="localstorage-manager.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loggedInUserAadhaar = sessionStorage.getItem('loggedInUser');
+      if (!loggedInUserAadhaar) {
+        alert("You must be logged in to take the survey.");
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const surveyForm = document.getElementById('survey-form');
+      const stateOriginSelect = document.getElementById('stateOrigin');
+      const getLocationBtn = document.getElementById('getLocationBtn');
+      
+      const indianStates = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"];
+      indianStates.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        stateOriginSelect.appendChild(option);
+      });
+
+      getLocationBtn.addEventListener('click', () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude.toFixed(5);
+            const lon = position.coords.longitude.toFixed(5);
+            document.getElementById('currentLocation').value = `${lat}, ${lon}`;
+          });
+        }
+      });
+
+      surveyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const surveyData = {
+          stateOrigin: stateOriginSelect.value,
+          districtOrigin: document.getElementById('districtOrigin').value.trim(),
+          currentLocation: document.getElementById('currentLocation').value.trim(),
+          symptoms: document.getElementById('currentSymptoms').value.trim(),
+          dateSubmitted: new Date().toISOString()
+        };
+
+        const success = saveSurveyData(loggedInUserAadhaar, surveyData);
+        if (success) {
+          alert('Survey submitted successfully! You will be redirected to your records.');
+          window.location.href = 'records.html';
+        } else {
+          alert('There was an error submitting your survey.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

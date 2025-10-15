@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "../.git"
+		},
+		{
+			"path": "../backend"
+		},
+		{
+			"path": "../database"
+		},
+		{
+			"path": "../designs"
+		},
+		{
+			"path": "../docs"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../ml-models"
+		},
+		{
+			"path": "../tests"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "frontend"
+	}
+}

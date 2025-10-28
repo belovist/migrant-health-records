@@ -1,54 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Appointments - DHRMS Kerala</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" />
+  <style>
+    /* ========= BASE ========= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <!-- Header -->
-  <header class="header">
-    <div class="logo-container">
-      <h1 class="app-title">DHRMS Kerala</h1>
-    </div>
-    <nav class="navbar">
+    body {
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #1f2937;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ========= HEADER ========= */
+    header {
+      background-color: #0c4a6e;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .app-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: #e0f2fe;
+      font-weight: 500;
+      transition: 0.3s;
+      padding-bottom: 3px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #fff;
+      border-bottom: 2px solid #7dd3fc;
+    }
+
+    .lang-toggle-container {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-button {
+      border: 1px solid #fff;
+      color: #fff;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+    }
+
+    .lang-button.active,
+    .lang-button:hover {
+      background: #fff;
+      color: #0c4a6e;
+    }
+
+    /* ========= HERO ========= */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: #ffffff;
+      border-bottom: 2px solid #e5e7eb;
+      box-shadow: 0 2px 5px rgba(12, 74, 110, 0.08);
+    }
+
+    .hero h2 {
+      color: #0c4a6e;
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: #4b5563;
+      margin-bottom: 25px;
+    }
+
+    .book-btn {
+      padding: 12px 28px;
+      border: none;
+      background: linear-gradient(90deg, #0c4a6e, #083a5c);
+      color: #fff;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(12, 74, 110, 0.3);
+      transition: 0.3s;
+    }
+
+    .book-btn:hover {
+      transform: translateY(-3px);
+      background: #083a5c;
+    }
+
+    /* ========= STATS ========= */
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin: 50px auto;
+      max-width: 1200px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 25px 35px;
+      flex: 1;
+      min-width: 230px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(12, 74, 110, 0.1);
+      border: 1px solid #e5e7eb;
+      transition: 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(12, 74, 110, 0.15);
+    }
+
+    .stat-card i {
+      font-size: 2rem;
+      color: #0c4a6e;
+      margin-bottom: 10px;
+    }
+
+    .stat-title {
+      color: #0c4a6e;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    /* ========= FILTERS ========= */
+    .filters {
+      max-width: 1100px;
+      margin: 0 auto 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border: 1px solid #0c4a6e;
+      border-radius: 50px;
+      color: #0c4a6e;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: #0c4a6e;
+      color: #fff;
+    }
+
+    /* ========= APPOINTMENTS ========= */
+    .appointments-container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 60px;
+      width: 110%;
+      border: #083a5c;
+    }
+
+    .appointment-box {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 10px rgba(12, 74, 110, 0.08);
+      padding: 25px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      transition: 0.3s;
+    }
+
+    .appointment-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(12, 74, 110, 0.15);
+    }
+
+    .appointment-info h4 {
+      color: #0c4a6e;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .appointment-info p {
+      color: #4b5563;
+      margin: 3px 0;
+      font-size: 0.95rem;
+    }
+
+    .appointment-status {
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .confirmed {
+      background: #2ecc71;
+    }
+
+    .pending {
+      background: #f39c12;
+    }
+
+    .cancelled {
+      background: #e74c3c;
+    }
+
+    /* ========= FOOTER ========= */
+    footer {
+      background: #0c4a6e;
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+
+    footer p {
+      margin-bottom: 10px;
+    }
+
+    footer .socials i {
+      font-size: 1.4rem;
+      margin: 0 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    footer .socials i:hover {
+      color: #7dd3fc;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px 25px;
+      }
+      .stats-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .appointment-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1 class="app-title">DHRMS Kerala</h1>
+    <nav>
       <a href="index.html">Dashboard</a>
       <a href="records.html">My Records</a>
       <a href="appointments.html" class="active">Appointments</a>
-      <a href="resources.html">Health Resources</a>
+      <a href="resources.html">Resources</a>
       <a href="clinics.html">Clinics</a>
     </nav>
     <div class="lang-toggle-container">
-      <button class="lang-button active" data-lang="en">EN</button>
-      <button class="lang-button" data-lang="ml">ML</button>
+      <button class="lang-button active">EN</button>
+      <button class="lang-button">ML</button>
     </div>
   </header>
+  
 
-  <!-- Content -->
-  <main class="page-content">
-    <section class="hero">
-      <h2 class="hero-title">Appointments</h2>
-      <p>View and manage your upcoming and past appointments.</p>
-    </section>
+  <!-- HERO -->
+  <section class="hero">
+    <h2>Appointments Overview</h2>
+    <p>Track, manage, and book your healthcare visits seamlessly.</p>
+    <button class="book-btn">+ Book New Appointment</button>
+  </section>
 
-    <section class="info-grid">
-      <div class="info-card info-card--appointment">
-        <p class="info-card-label">Next Appointment</p>
-        <p class="info-card-text">15 Dec 2025, 10:30 AM</p>
+  <!-- STATS -->
+  <section class="stats-container">
+    <div class="stat-card">
+      <i class="ri-calendar-check-fill"></i>
+      <p class="stat-title">Next Appointment</p>
+      <p class="stat-value">15 Dec 2025</p>
+    </div>
+    <div class="stat-card">
+      <i class="ri-hospital-fill"></i>
+      <p class="stat-title">Clinics Visited</p>
+      <p class="stat-value">8</p>
+    </div>
+    <div class="stat-card">
+      <i class="ri-user-heart-fill"></i>
+      <p class="stat-title">Doctors Consulted</p>
+      <p class="stat-value">12</p>
+    </div>
+    <div class="stat-card">
+      <i class="ri-time-fill"></i>
+      <p class="stat-title">Pending Appointments</p>
+      <p class="stat-value">2</p>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active">Upcoming</button>
+    <button class="filter-btn">Completed</button>
+    <button class="filter-btn">Cancelled</button>
+  </div>
+
+  <!-- APPOINTMENTS -->
+  <section class="appointments-container">
+    <div class="appointment-box">
+      <div class="appointment-info">
+        <h4>Cardiology Review</h4>
+        <p><strong>Date:</strong> 15 Dec 2025, 10:30 AM</p>
+        <p><strong>Doctor:</strong> Dr. Anjali Menon</p>
+        <p><strong>Clinic:</strong> Govt. Medical College, Trivandrum</p>
       </div>
-      <div class="info-card">
-        <p class="info-card-label">Previous Appointment</p>
-        <p class="info-card-text">Dermatology - Oct 2025</p>
-      </div>
-    </section>
-  </main>
+      <div class="appointment-status confirmed">Confirmed</div>
+    </div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <p>© 2025 DHRMS Kerala. All Rights Reserved.</p>
+    <div class="appointment-box">
+      <div class="appointment-info">
+        <h4>Dental Checkup</h4>
+        <p><strong>Date:</strong> 28 Dec 2025, 9:15 AM</p>
+        <p><strong>Doctor:</strong> Dr. Nikhil Suresh</p>
+        <p><strong>Clinic:</strong> KIMS Dental Wing</p>
+      </div>
+      <div class="appointment-status pending">Awaiting Approval</div>
+    </div>
+
+    <div class="appointment-box">
+      <div class="appointment-info">
+        <h4>Eye Specialist Consultation</h4>
+        <p><strong>Date:</strong> 12 Oct 2025, 3:45 PM</p>
+        <p><strong>Doctor:</strong> Dr. Meera Krishnan</p>
+        <p><strong>Clinic:</strong> Sunrise Eye Hospital</p>
+      </div>
+      <div class="appointment-status cancelled">Cancelled</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DHRMS Kerala | Department of Health, Government of Kerala</p>
+    <div class="socials">
+      <i class="ri-facebook-fill"></i>
+      <i class="ri-twitter-x-fill"></i>
+      <i class="ri-instagram-fill"></i>
+      <i class="ri-linkedin-box-fill"></i>
+    </div>
   </footer>
-
 </body>
 </html>
